@@ -16,7 +16,7 @@ servers = ["redis://redis:6379"]
 # Network settings
 [network]
 net_id = "000000"
-enabled_regions = ["EU868", "US915", "AS923", "AU915", "CN779", "EU433", "IN865", "KR920", "RU864"]
+enabled_regions = ["EU868"]
 
 # API settings
 [api]
@@ -50,14 +50,6 @@ enabled = true
   server = "tcp://mosquitto:1883"
   qos = 0
   clean_session = false
-
-[[regions]]
-name = "us915"
-enabled = true
-
-[[regions]]
-name = "as923"
-enabled = true
 
 # Device settings
 [device_session]
