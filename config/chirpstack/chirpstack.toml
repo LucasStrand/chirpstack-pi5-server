@@ -42,10 +42,10 @@ name = "eu868"
 enabled = true
 
   # Gateway backend configuration for EU868
-  [regions.gateway]
-  backend = "mqtt"
+  [regions.gateway.backend]
+  type = "mqtt"
   
-  [regions.gateway.mqtt]
+  [regions.gateway.backend.mqtt]
   server = "tcp://mosquitto:1883/"
   username = ""
   password = ""
