@@ -13,6 +13,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
+    - name: Install Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
+    
     - name: Test Docker Compose syntax
       run: |
         docker-compose config
