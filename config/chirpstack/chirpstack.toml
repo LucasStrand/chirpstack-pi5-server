@@ -36,6 +36,28 @@ json = true
 # Allow unknown gateways
 allow_unknown_gateways = true
 
+# Gateway backend configuration
+[gateway.backend]
+# Backend type (mqtt, semtech_udp, basic_station)
+type = "mqtt"
+
+# MQTT gateway backend settings
+[gateway.backend.mqtt]
+server = "tcp://mosquitto:1883/"
+username = ""
+password = ""
+qos = 0
+clean_session = false
+client_id = ""
+ca_cert = ""
+tls_cert = ""
+tls_key = ""
+
+# Topic templates
+event_topic = "gateway/+/event/+"
+state_topic = "gateway/+/state/+"
+command_topic = "gateway/+/command/+"
+
 # Region specific settings
 [[regions]]
 name = "eu868"
