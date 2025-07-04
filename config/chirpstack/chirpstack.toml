@@ -41,12 +41,22 @@ allow_unknown_gateways = true
 name = "eu868"
 enabled = true
 
-  # Gateway backend for EU868
-  [regions.gateway.backend]
-  type = "mqtt"
+  # Gateway backend configuration for EU868
+  [regions.gateway]
+  backend = "mqtt"
   
-  [regions.gateway.backend.mqtt]
+  [regions.gateway.mqtt]
   server = "tcp://mosquitto:1883/"
+  username = ""
+  password = ""
+  qos = 0
+  clean_session = false
+  client_id = ""
+  ca_cert = ""
+  tls_cert = ""
+  tls_key = ""
+  
+  # Topic templates
   event_topic = "gateway/+/event/+"
   state_topic = "gateway/+/state/+"
   command_topic = "gateway/+/command/+"
