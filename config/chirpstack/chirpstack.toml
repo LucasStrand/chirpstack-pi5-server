@@ -16,7 +16,7 @@ servers = ["redis://redis:6379"]
 # Network settings
 [network]
 net_id = "000000"
-enabled_regions = ["EU868"]
+enabled_regions = ["eu868"]
 
 # API settings
 [api]
