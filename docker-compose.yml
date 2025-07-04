@@ -79,11 +79,12 @@ services:
       timeout: 10s
       retries: 3
 
-  # ChirpStack Gateway Bridge
+    # ChirpStack Gateway Bridge
   chirpstack-gateway-bridge:
     image: chirpstack/chirpstack-gateway-bridge:4
     container_name: chirpstack-gateway-bridge
     restart: unless-stopped
+    command: -c /etc/chirpstack-gateway-bridge/chirpstack-gateway-bridge.toml
     ports:
       - "1700:1700/udp"
     volumes:
@@ -91,7 +92,6 @@ services:
     depends_on:
       mosquitto:
         condition: service_healthy
-
     healthcheck:
       test: ["CMD", "chirpstack-gateway-bridge", "version"]
       interval: 30s
