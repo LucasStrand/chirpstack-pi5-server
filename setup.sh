@@ -56,7 +56,7 @@ echo "Generated API secret: $SECRET"
 
 # Update ChirpStack configuration with the secret
 if [ -f "config/chirpstack/chirpstack.toml" ]; then
-    sed -i "s/you-must-replace-this-with-a-random-string/$SECRET/g" config/chirpstack/chirpstack.toml
+    sed -i "s|you-must-replace-this-with-a-random-string|$SECRET|g" config/chirpstack/chirpstack.toml
     echo "Updated ChirpStack configuration with generated secret"
 fi
 
