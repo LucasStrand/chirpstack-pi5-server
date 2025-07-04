@@ -21,7 +21,7 @@ enabled_regions = ["EU868", "US915", "AS923", "AU915", "CN779", "EU433", "IN865"
 # API settings
 [api]
 bind = "0.0.0.0:8080"
-secret = "you-must-replace-this-with-a-random-string"
+secret = "SN9PgGFP/MQSS5Wz7o4SQhNwT0zisvbpk2ZKEny4WCo="
 
 # Integration settings
 [integration]
@@ -37,16 +37,17 @@ json = true
 allow_unknown_gateways = true
 
 # Region specific settings
-[regions]
+[[regions]]
+name = "eu868"
+enabled = true
 
-[regions.eu868]
-user_channels = []
+[[regions]]
+name = "us915"
+enabled = true
 
-[regions.us915]
-enabled_channels = [0, 1, 2, 3, 4, 5, 6, 7]
-
-[regions.as923]
-user_channels = []
+[[regions]]
+name = "as923"
+enabled = true
 
 # Device settings
 [device_session]

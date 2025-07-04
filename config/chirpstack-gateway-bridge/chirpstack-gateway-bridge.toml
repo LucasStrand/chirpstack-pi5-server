@@ -1,7 +1,7 @@
 # ChirpStack Gateway Bridge configuration
 
 [general]
-log_level = "INFO"
+log_level = 2
 
 # Gateway backend configuration
 [backend]
