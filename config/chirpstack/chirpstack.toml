@@ -1,0 +1,58 @@
+# ChirpStack configuration for Raspberry Pi 5
+
+[general]
+# Log level
+log_level = "info"
+
+# PostgreSQL settings
+[postgresql]
+dsn = "postgres://chirpstack:chirpstack_postgres_pass@postgres/chirpstack?sslmode=disable"
+max_open_connections = 10
+
+# Redis settings
+[redis]
+servers = ["redis://redis:6379"]
+
+# Network settings
+[network]
+net_id = "000000"
+enabled_regions = ["EU868", "US915", "AS923", "AU915", "CN779", "EU433", "IN865", "KR920", "RU864"]
+
+# API settings
+[api]
+bind = "0.0.0.0:8080"
+secret = "you-must-replace-this-with-a-random-string"
+
+# Integration settings
+[integration]
+enabled = ["mqtt"]
+
+[integration.mqtt]
+server = "tcp://mosquitto:1883/"
+json = true
+
+# Gateway backend settings
+[gateway]
+# Allow unknown gateways
+allow_unknown_gateways = true
+
+# Region specific settings
+[regions]
+
+[regions.eu868]
+user_channels = []
+
+[regions.us915]
+enabled_channels = [0, 1, 2, 3, 4, 5, 6, 7]
+
+[regions.as923]
+user_channels = []
+
+# Device settings
+[device_session]
+# Deduplication delay (in seconds)
+deduplication_delay = "200ms"
+
+# Device queue
+[device_session.device_queue]
+max_size = 100 

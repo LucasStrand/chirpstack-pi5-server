@@ -1,0 +1,125 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: chirpstack-postgres
+    restart: unless-stopped
+    volumes:
+      - ./data/postgresql:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=chirpstack_postgres_pass
+      - POSTGRES_USER=chirpstack
+      - POSTGRES_DB=chirpstack
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chirpstack"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: chirpstack-redis
+    restart: unless-stopped
+    volumes:
+      - ./data/redis:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Mosquitto MQTT Broker
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: chirpstack-mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./config/mosquitto:/mosquitto/config
+      - ./data/mosquitto:/mosquitto/data
+      - ./data/mosquitto/log:/mosquitto/log
+    healthcheck:
+      test: ["CMD", "mosquitto_pub", "-t", "test", "-m", "test", "-q", "0"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ChirpStack Network Server
+  chirpstack:
+    image: chirpstack/chirpstack:4
+    container_name: chirpstack
+    restart: unless-stopped
+    command: -c /etc/chirpstack
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./config/chirpstack:/etc/chirpstack
+      - ./data/chirpstack-upload:/var/lib/chirpstack-upload
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mosquitto:
+        condition: service_healthy
+    environment:
+      - MQTT_BROKER_HOST=mosquitto
+      - MQTT_BROKER_PORT=1883
+      - REDIS_HOST=redis
+      - POSTGRESQL_HOST=postgres
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ChirpStack Gateway Bridge
+  chirpstack-gateway-bridge:
+    image: chirpstack/chirpstack-gateway-bridge:4
+    container_name: chirpstack-gateway-bridge
+    restart: unless-stopped
+    ports:
+      - "1700:1700/udp"
+    volumes:
+      - ./config/chirpstack-gateway-bridge:/etc/chirpstack-gateway-bridge
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+    environment:
+      - INTEGRATION__MQTT__EVENT_TOPIC_TEMPLATE=eu868/gateway/{{ .GatewayID }}/event/{{ .EventType }}
+      - INTEGRATION__MQTT__STATE_TOPIC_TEMPLATE=eu868/gateway/{{ .GatewayID }}/state/{{ .StateType }}
+      - INTEGRATION__MQTT__COMMAND_TOPIC_TEMPLATE=eu868/gateway/{{ .GatewayID }}/command/{{ .CommandType }}
+    healthcheck:
+      test: ["CMD", "chirpstack-gateway-bridge", "version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ChirpStack REST API (optional, for easier API access)
+  chirpstack-rest-api:
+    image: chirpstack/chirpstack-rest-api:4
+    container_name: chirpstack-rest-api
+    restart: unless-stopped
+    ports:
+      - "8090:8090"
+    volumes:
+      - ./config/chirpstack-rest-api:/etc/chirpstack-rest-api
+    depends_on:
+      - chirpstack
+    environment:
+      - SERVER=chirpstack:8080
+
+volumes:
+  postgres_data:
+  redis_data:
+  mosquitto_data:
+  mosquitto_log:
+
+networks:
+  default:
+    name: chirpstack-network 

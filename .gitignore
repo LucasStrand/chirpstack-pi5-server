@@ -1,0 +1,33 @@
+# Data directories
+data/
+data_old_*/
+
+# Config backups
+config_old_*/
+
+# Backup files
+backups/
+*.tar.gz
+
+# Environment files with secrets
+.env
+
+# Generated files
+example_local_conf.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.temp 

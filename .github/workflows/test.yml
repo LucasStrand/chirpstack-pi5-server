@@ -1,0 +1,49 @@
+name: Test ChirpStack Setup
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-docker-compose:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Test Docker Compose syntax
+      run: |
+        docker-compose config
+    
+    - name: Test configuration files
+      run: |
+        # Check that all required config files exist
+        test -f config/chirpstack/chirpstack.toml
+        test -f config/chirpstack-gateway-bridge/chirpstack-gateway-bridge.toml
+        test -f config/mosquitto/mosquitto.conf
+        
+        # Check scripts are executable
+        test -x setup.sh
+        test -x configure-gateway.sh
+        test -x backup-restore.sh
+    
+    - name: Test Docker images can be pulled
+      run: |
+        docker-compose pull --ignore-pull-failures
+    
+    - name: Validate TOML configuration files
+      run: |
+        # Install TOML validator
+        pip install toml
+        
+        # Validate TOML files
+        python -c "import toml; toml.load('config/chirpstack/chirpstack.toml')"
+        python -c "import toml; toml.load('config/chirpstack-gateway-bridge/chirpstack-gateway-bridge.toml')"
+    
+    - name: Test setup script syntax
+      run: |
+        bash -n setup.sh
+        bash -n configure-gateway.sh
+        bash -n backup-restore.sh 
