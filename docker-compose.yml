@@ -90,8 +90,8 @@ services:
       mosquitto:
         condition: service_healthy
     environment:
-      - INTEGRATION__MQTT__SERVER=tcp://mosquitto:1883
-      - BACKEND__SEMTECH_UDP__BIND=0.0.0.0:1700
+      - INTEGRATION__MQTT__AUTH__GENERIC__SERVERS=tcp://mosquitto:1883
+      - BACKEND__SEMTECH_UDP__UDP_BIND=0.0.0.0:1700
       - GENERAL__LOG_LEVEL=4
     healthcheck:
       test: ["CMD", "chirpstack-gateway-bridge", "version"]
