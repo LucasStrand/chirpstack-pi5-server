@@ -43,23 +43,13 @@ enabled = true
 
   # Gateway backend configuration for EU868
   [regions.gateway.backend]
-  type = "mqtt"
+  enabled = "mqtt"
   
   [regions.gateway.backend.mqtt]
-  server = "tcp://mosquitto:1883/"
-  username = ""
-  password = ""
+  topic_prefix = "eu868"
+  server = "tcp://mosquitto:1883"
   qos = 0
   clean_session = false
-  client_id = ""
-  ca_cert = ""
-  tls_cert = ""
-  tls_key = ""
-  
-  # Topic templates
-  event_topic = "gateway/+/event/+"
-  state_topic = "gateway/+/state/+"
-  command_topic = "gateway/+/command/+"
 
 [[regions]]
 name = "us915"
