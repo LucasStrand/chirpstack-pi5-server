@@ -84,14 +84,15 @@ services:
     image: chirpstack/chirpstack-gateway-bridge:4
     container_name: chirpstack-gateway-bridge
     restart: unless-stopped
-    command: -c /etc/chirpstack-gateway-bridge/chirpstack-gateway-bridge.toml
     ports:
       - "1700:1700/udp"
-    volumes:
-      - ./config/chirpstack-gateway-bridge:/etc/chirpstack-gateway-bridge
     depends_on:
       mosquitto:
         condition: service_healthy
+    environment:
+      - INTEGRATION_MQTT_SERVER=tcp://mosquitto:1883
+      - BACKEND_SEMTECH_UDP_BIND=0.0.0.0:1700
+      - GENERAL_LOG_LEVEL=4
     healthcheck:
       test: ["CMD", "chirpstack-gateway-bridge", "version"]
       interval: 30s
