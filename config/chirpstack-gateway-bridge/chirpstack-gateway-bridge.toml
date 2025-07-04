@@ -18,8 +18,6 @@ type = "mqtt"
 event_topic_template = "eu868/gateway/{{ .GatewayID }}/event/{{ .EventType }}"
 state_topic_template = "eu868/gateway/{{ .GatewayID }}/state/{{ .StateType }}"
 command_topic_template = "eu868/gateway/{{ .GatewayID }}/command/{{ .CommandType }}"
-
-# MQTT server configuration
 server = "tcp://mosquitto:1883"
 username = ""
 password = ""
