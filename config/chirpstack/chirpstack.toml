@@ -38,7 +38,9 @@ allow_unknown_gateways = true
 
 # Region specific settings
 [[regions]]
-name = "eu868"
+id = "eu868"
+description = "EU868"
+common_name = "EU868"
 enabled = true
 
   # Gateway backend configuration for EU868
